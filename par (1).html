@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Возраст</title>
+<style>
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --bg: #f2f2f7;
+    --card: #ffffff;
+    --card-2: #f9f9fb;
+    --separator: rgba(60, 60, 67, 0.18);
+    --separator-2: rgba(60, 60, 67, 0.08);
+    --text: #000000;
+    --text-2: #3c3c43;
+    --text-3: #8e8e93;
+    --text-4: #c7c7cc;
+    --blue: #007aff;
+    --blue-dark: #0062cc;
+    --green: #34c759;
+    --orange: #ff9500;
+    --red: #ff3b30;
+    --purple: #5856d6;
+    --pink: #ff2d55;
+    --teal: #5ac8fa;
+    --yellow: #ffcc00;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                 "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue",
+                 Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 17px;
+    line-height: 1.4;
+    padding: 0 0 60px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+/* ============ NAV BAR ============ */
+.nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(242, 242, 247, 0.82);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 0.5px solid var(--separator);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 52px;
+}
+
+.nav-bar h1 {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.4px;
+    flex: 1;
+    text-align: center;
+}
+
+.nav-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--blue);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+    font-family: inherit;
+}
+
+.nav-btn:hover { background: rgba(0, 122, 255, 0.08); }
+.nav-btn:active { background: rgba(0, 122, 255, 0.15); }
+.nav-btn svg { width: 22px; height: 22px; }
+
+/* ============ CONTAINER ============ */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 16px 16px 0;
+}
+
+.large-title {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -1.2px;
+    margin: 8px 4px 20px;
+    line-height: 1.15;
+}
+
+.large-title .sub {
+    display: block;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-3);
+    letter-spacing: -0.2px;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+/* ============ GROUPS ============ */
+.group {
+    background: var(--card);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+    animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.group-header {
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: -0.1px;
+    color: var(--text-3);
+    padding: 0 20px 8px;
+}
+
+/* ============ INPUT FIELDS ============ */
+.field-row {
+    display: flex;
+    border-bottom: 0.5px solid var(--separator-2);
+}
+
+.field {
+    flex: 1;
+    padding: 12px 20px;
+    border-right: 0.5px solid var(--separator-2);
+}
+
+.field:last-child { border-right: none; }
+
+.field label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 2px;
+}
+
+.field input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    font-family: inherit;
+    outline: none;
+    letter-spacing: -0.6px;
+    padding: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.field input::placeholder { color: var(--text-4); font-weight: 400; }
+
+.field input::-webkit-outer-spin-button,
+.field input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.field input[type=number] { -moz-appearance: textfield; }
+
+/* ============ BUTTONS ============ */
+.btn-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    flex: 1;
+    padding: 16px 20px;
+    font-size: 17px;
+    font-weight: 600;
+    font-family: inherit;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: -0.4px;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-primary {
+    background: var(--blue);
+    color: white;
+    box-shadow: 0 1px 3px rgba(0, 122, 255, 0.3);
+}
+.btn-primary:hover { background: var(--blue-dark); }
+.btn-primary:active { transform: scale(0.98); opacity: 0.9; }
+
+.btn-secondary {
+    background: var(--card);
+    color: var(--blue);
+    box-shadow: var(--shadow-sm);
+}
+.btn-secondary:hover { background: var(--card-2); }
+.btn-secondary:active { transform: scale(0.98); opacity: 0.9; }
+
+.btn-ghost {
+    background: transparent;
+    color: var(--blue);
+    padding: 14px;
+}
+
+/* ============ RESULTS ============ */
+#results { display: none; }
+#results.show { display: block; }
+
+/* HERO */
+.hero {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 36px 24px 28px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-md);
+    animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 122, 255, 0.06) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 1px dashed rgba(0, 122, 255, 0.15);
+    pointer-events: none;
+    animation: rotateSlow 60s linear infinite;
+}
+
+@keyframes rotateSlow {
+    to { transform: translateX(-50%) rotate(360deg); }
+}
+
+.hero-number {
+    font-size: 96px;
+    font-weight: 700;
+    letter-spacing: -6px;
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 8px;
+    font-variant-numeric: tabular-nums;
+    animation: pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+}
+
+@keyframes pop {
+    0% { transform: scale(0.85); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.hero-unit {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-2);
+    letter-spacing: -0.4px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.hero-detail {
+    font-size: 15px;
+    color: var(--text-3);
+    letter-spacing: -0.2px;
+    padding-top: 20px;
+    border-top: 0.5px solid var(--separator-2);
+    line-height: 1.5;
+    position: relative;
+}
+
+/* ============ ZODIAC CARD ============ */
+.zodiac-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    position: relative;
+    overflow: hidden;
+}
+
+.zodiac-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #5856d6, #007aff);
+    color: white;
+    box-shadow: 0 6px 16px rgba(88, 86, 214, 0.28);
+    position: relative;
+}
+
+.zodiac-icon svg { width: 40px; height: 40px; }
+
+.zodiac-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.zodiac-info .name {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.6px;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.zodiac-info .meta {
+    font-size: 14px;
+    color: var(--text-3);
+    letter-spacing: -0.2px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* ============ STATS GRID ============ */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+    animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stat-card .icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: white;
+}
+
+.stat-card .icon svg { width: 22px; height: 22px; }
+
+.stat-card .icon.blue { background: linear-gradient(135deg, #007aff, #5856d6); }
+.stat-card .icon.green { background: linear-gradient(135deg, #34c759, #30d158); }
+.stat-card .icon.orange { background: linear-gradient(135deg, #ff9500, #ff6b00); }
+.stat-card .icon.purple { background: linear-gradient(135deg, #5856d6, #af52de); }
+.stat-card .icon.pink { background: linear-gradient(135deg, #ff2d55, #ff375f); }
+.stat-card .icon.teal { background: linear-gradient(135deg, #5ac8fa, #007aff); }
+
+.stat-card .content {
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-card .label {
+    font-size: 11px;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 2px;
+}
+
+.stat-card .value {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.4px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stat-card .value.small { font-size: 15px; }
+
+/* ============ PROGRESS ============ */
+.progress-row {
+    padding: 16px 20px;
+    border-bottom: 0.5px solid var(--separator-2);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.progress-row:last-child { border-bottom: none; }
+
+.progress-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: white;
+}
+
+.progress-icon svg { width: 18px; height: 18px; }
+
+.progress-icon.blue { background: linear-gradient(135deg, #007aff, #5856d6); }
+.progress-icon.green { background: linear-gradient(135deg, #34c759, #30d158); }
+.progress-icon.orange { background: linear-gradient(135deg, #ff9500, #ff6b00); }
+
+.progress-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.progress-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+}
+
+.progress-head .label {
+    font-size: 14px;
+    color: var(--text-2);
+    letter-spacing: -0.2px;
+}
+
+.progress-head .pct {
+    font-size: 14px;
+    color: var(--text-3);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
+
+.progress-track {
+    height: 5px;
+    background: rgba(120, 120, 128, 0.16);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--blue);
+    border-radius: 3px;
+    transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.progress-fill.green { background: var(--green); }
+.progress-fill.orange { background: var(--orange); }
+
+/* ============ LIVE LIST ============ */
+.live-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 20px;
+    border-bottom: 0.5px solid var(--separator-2);
+}
+
+.live-row:last-child { border-bottom: none; }
+
+.live-row .label {
+    font-size: 16px;
+    color: var(--text-2);
+    letter-spacing: -0.3px;
+}
+
+.live-row .value {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.3px;
+}
+
+/* ============ ROWS ============ */
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 0.5px solid var(--separator-2);
+    min-height: 48px;
+    gap: 12px;
+}
+
+.row:last-child { border-bottom: none; }
+
+.row-label {
+    font-size: 17px;
+    color: var(--text);
+    letter-spacing: -0.4px;
+}
+
+.row-value {
+    font-size: 17px;
+    color: var(--text-3);
+    letter-spacing: -0.4px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.row-value.strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+/* ============ CHINESE ZODIAC ============ */
+.chinese-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.chinese-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #ff2d55, #ff9500);
+    color: white;
+    box-shadow: 0 6px 16px rgba(255, 45, 85, 0.25);
+}
+
+.chinese-icon svg { width: 36px; height: 36px; }
+
+.chinese-info .name {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.chinese-info .meta {
+    font-size: 14px;
+    color: var(--text-3);
+    letter-spacing: -0.2px;
+}
+
+/* ============ CONFETTI ============ */
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    top: -20px;
+    z-index: 999;
+    pointer-events: none;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(105vh) rotate(540deg);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ MODALS ============ */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 200;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.modal-overlay.show {
+    display: flex;
+    opacity: 1;
+}
+
+.modal {
+    background: var(--bg);
+    width: 100%;
+    max-width: 500px;
+    border-radius: 14px 14px 0 0;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.modal-overlay.show .modal { transform: translateY(0); }
+
+.modal-header {
+    padding: 16px 20px;
+    border-bottom: 0.5px solid var(--separator-2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card);
+    border-radius: 14px 14px 0 0;
+}
+
+.modal-header h3 {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.4px;
+}
+
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.modal-footer {
+    padding: 12px 20px 20px;
+    border-top: 0.5px solid var(--separator-2);
+    background: var(--card);
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--text-3);
+    padding: 40px 20px;
+    font-size: 15px;
+}
+
+.history-item {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.history-item:active { transform: scale(0.98); }
+
+.history-item .date {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.2px;
+}
+
+.history-item .age {
+    font-size: 14px;
+    color: var(--text-3);
+    letter-spacing: -0.2px;
+    margin-top: 2px;
+}
+
+.history-item .num {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--blue);
+    letter-spacing: -0.6px;
+}
+
+/* ============ INFO BLOCK ============ */
+.info-block {
+    padding: 16px 20px;
+    border-bottom: 0.5px solid var(--separator-2);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--card);
+}
+
+.info-block:last-child { border-bottom: none; }
+
+.info-block .num {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.info-block .content { flex: 1; }
+
+.info-block .title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    margin-bottom: 3px;
+}
+
+.info-block .text {
+    font-size: 14px;
+    color: var(--text-3);
+    letter-spacing: -0.1px;
+    line-height: 1.45;
+}
+
+/* ============ ADAPTIVE ============ */
+@media (max-width: 520px) {
+    .large-title { font-size: 30px; letter-spacing: -1px; }
+    .hero-number { font-size: 76px; letter-spacing: -5px; }
+    .field input { font-size: 20px; }
+    .zodiac-icon { width: 60px; height: 60px; }
+    .zodiac-icon svg { width: 34px; height: 34px; }
+    .zodiac-info .name { font-size: 19px; }
+    .stat-card { padding: 14px; gap: 10px; }
+    .stat-card .icon { width: 36px; height: 36px; }
+    .stat-card .icon svg { width: 20px; height: 20px; }
+    .stat-card .value { font-size: 15px; }
+    .stat-card .value.small { font-size: 13px; }
+}
+
+@media (max-width: 380px) {
+    .hero-number { font-size: 64px; }
+    .stats-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #000000;
+        --card: #1c1c1e;
+        --card-2: #2c2c2e;
+        --separator: rgba(255, 255, 255, 0.12);
+        --separator-2: rgba(84, 84, 88, 0.4);
+        --text: #ffffff;
+        --text-2: #ebebf5;
+        --text-3: #8e8e93;
+        --text-4: #48484a;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+        --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.5);
+        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+    .nav-bar { background: rgba(0, 0, 0, 0.72); }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav-bar">
+    <button class="nav-btn" id="historyBtn" title="История">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+            <path d="M12 7v5l4 2"/>
+        </svg>
+    </button>
+    <h1>Возраст</h1>
+    <button class="nav-btn" id="infoBtn" title="Информация">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+    </button>
+</nav>
+
+<div class="container">
+
+    <div class="large-title">
+        Ваш возраст
+        <span class="sub">Введите дату рождения — узнаете всё о своём возрасте</span>
+    </div>
+
+    <div class="group">
+        <div class="field-row">
+            <div class="field">
+                <label>День</label>
+                <input type="number" id="day" placeholder="15" min="1" max="31" inputmode="numeric">
+            </div>
+            <div class="field">
+                <label>Месяц</label>
+                <input type="number" id="month" placeholder="6" min="1" max="12" inputmode="numeric">
+            </div>
+            <div class="field">
+                <label>Год</label>
+                <input type="number" id="year" placeholder="1995" min="1900" max="2100" inputmode="numeric">
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-row">
+        <button class="btn btn-primary" id="calcBtn">Рассчитать</button>
+        <button class="btn btn-secondary" id="todayBtn">Сегодня</button>
+    </div>
+
+    <div id="results">
+
+        <div class="hero">
+            <div class="hero-number" id="heroAge">0</div>
+            <div class="hero-unit" id="heroUnit">лет</div>
+            <div class="hero-detail" id="heroSub">—</div>
+        </div>
+
+        <div class="zodiac-card" id="zodiacCard">
+            <div class="zodiac-icon" id="zodiacIconWrap"></div>
+            <div class="zodiac-info">
+                <div class="name" id="zodiacName">—</div>
+                <div class="meta">
+                    <span id="zodiacElement">—</span>
+                    <span id="zodiacPlanet">—</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chinese-card" id="chineseCard">
+            <div class="chinese-icon" id="chineseIconWrap"></div>
+            <div class="chinese-info">
+                <div class="name" id="chineseName">—</div>
+                <div class="meta" id="chineseYear">—</div>
+            </div>
+        </div>
+
+        <div class="group-header">О дате рождения</div>
+        <div class="stats-grid">
+            <div class="stat-card" style="animation-delay: 0.05s">
+                <div class="icon blue" id="statIcon1"></div>
+                <div class="content">
+                    <div class="label">День недели</div>
+                    <div class="value" id="weekday">—</div>
+                </div>
+            </div>
+            <div class="stat-card" style="animation-delay: 0.08s">
+                <div class="icon purple" id="statIcon2"></div>
+                <div class="content">
+                    <div class="label">Камень месяца</div>
+                    <div class="value small" id="birthstone">—</div>
+                </div>
+            </div>
+            <div class="stat-card" style="animation-delay: 0.11s">
+                <div class="icon green" id="statIcon3"></div>
+                <div class="content">
+                    <div class="label">Пора года</div>
+                    <div class="value" id="season">—</div>
+                </div>
+            </div>
+            <div class="stat-card" style="animation-delay: 0.14s">
+                <div class="icon orange" id="statIcon4"></div>
+                <div class="content">
+                    <div class="label">Знак по декаде</div>
+                    <div class="value small" id="decan">—</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="group-header">День рождения</div>
+        <div class="group" style="animation-delay: 0.2s">
+            <div class="row">
+                <span class="row-label">Следующий</span>
+                <span class="row-value strong" id="nextBd">—</span>
+            </div>
+            <div class="row">
+                <span class="row-label">До него</span>
+                <span class="row-value strong" id="daysToBd">—</span>
+            </div>
+            <div class="row">
+                <span class="row-label">Будет лет</span>
+                <span class="row-value strong" id="willBeAge">—</span>
+            </div>
+        </div>
+
+        <div class="group-header">Прогресс</div>
+        <div class="group" style="animation-delay: 0.25s">
+            <div class="progress-row">
+                <div class="progress-icon blue" id="progIcon1"></div>
+                <div class="progress-body">
+                    <div class="progress-head">
+                        <span class="label">Год жизни</span>
+                        <span class="pct" id="progressPct">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-icon green" id="progIcon2"></div>
+                <div class="progress-body">
+                    <div class="progress-head">
+                        <span class="label">Месяц</span>
+                        <span class="pct" id="progressMonthPct">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill green" id="progressMonthFill"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-icon orange" id="progIcon3"></div>
+                <div class="progress-body">
+                    <div class="progress-head">
+                        <span class="label">День</span>
+                        <span class="pct" id="progressDayPct">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill orange" id="progressDayFill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="group-header">Всего прожито</div>
+        <div class="group" style="animation-delay: 0.3s">
+            <div class="live-row"><span class="label">Лет</span><span class="value" id="liveYears">0</span></div>
+            <div class="live-row"><span class="label">Месяцев</span><span class="value" id="liveMonths">0</span></div>
+            <div class="live-row"><span class="label">Недель</span><span class="value" id="liveWeeks">0</span></div>
+            <div class="live-row"><span class="label">Дней</span><span class="value" id="liveDays">0</span></div>
+            <div class="live-row"><span class="label">Часов</span><span class="value" id="liveHours">0</span></div>
+            <div class="live-row"><span class="label">Минут</span><span class="value" id="liveMinutes">0</span></div>
+            <div class="live-row"><span class="label">Секунд</span><span class="value" id="liveSeconds">0</span></div>
+        </div>
+
+        <div class="group-header">Интересные факты</div>
+        <div class="group" style="animation-delay: 0.35s">
+            <div class="live-row"><span class="label">Ударов сердца</span><span class="value" id="liveHeart">0</span></div>
+            <div class="live-row"><span class="label">Вдохов</span><span class="value" id="liveBreath">0</span></div>
+            <div class="live-row"><span class="label">Полных лун</span><span class="value" id="liveMoons">0</span></div>
+            <div class="live-row"><span class="label">Оборотов Земли</span><span class="value" id="liveOrbits">0</span></div>
+            <div class="live-row"><span class="label">Снов (прибл.)</span><span class="value" id="liveDreams">0</span></div>
+            <div class="live-row"><span class="label">Слов сказано</span><span class="value" id="liveWords">0</span></div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal-overlay" id="historyModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>История</h3>
+            <button class="nav-btn" id="closeHistory" style="color: var(--text-3);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body" id="historyList">
+            <p class="empty-state">Здесь появятся ваши последние расчёты</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost" id="clearHistoryBtn" style="width: 100%;">Очистить историю</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="infoModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>О приложении</h3>
+            <button class="nav-btn" id="closeInfo" style="color: var(--text-3);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body" style="padding: 0;">
+            <div class="info-block">
+                <div class="num">1</div>
+                <div class="content">
+                    <div class="title">Точный возраст</div>
+                    <div class="text">Годы, месяцы и дни — с учётом високосных лет и реальной длины месяцев</div>
+                </div>
+            </div>
+            <div class="info-block">
+                <div class="num">2</div>
+                <div class="content">
+                    <div class="title">Астрология</div>
+                    <div class="text">Знак зодиака, стихия, планета-покровитель и камень месяца рождения</div>
+                </div>
+            </div>
+            <div class="info-block">
+                <div class="num">3</div>
+                <div class="content">
+                    <div class="title">Китайский гороскоп</div>
+                    <div class="text">Год рождения по восточному календарю — одно из 12 животных</div>
+                </div>
+            </div>
+            <div class="info-block">
+                <div class="num">4</div>
+                <div class="content">
+                    <div class="title">Живые счётчики</div>
+                    <div class="text">Секунды, минуты, часы и дни обновляются в реальном времени</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+'use strict';
+
+var birthDate = null;
+var liveInterval = null;
+
+var MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+              'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+
+var WEEKDAYS = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда',
+                'Четверг', 'Пятница', 'Суббота'];
+
+var ZODIAC_SVG = {
+    'Овен': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6c-2 0-4 2-4 5s2 5 4 5 4-2 4-5V4"/><path d="M16 6c2 0 4 2 4 5s-2 5-4 5-4-2-4-5V4"/></svg>',
+    'Телец': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6"/><path d="M4 4c0 4 3 6 8 6s8-2 8-6"/></svg>',
+    'Близнецы': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v16M15 4v16"/><path d="M5 4h14M5 20h14"/></svg>',
+    'Рак': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/><path d="M10 12h4"/></svg>',
+    'Лев': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="13" r="5"/><path d="M15 8c1-3 4-3 5-2s0 4-3 5"/><path d="M5 18c-1 2 0 3 1 3"/></svg>',
+    'Дева': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8v8M5 12c0-2 2-4 4-4s4 2 4 4v4M13 12c0-2 2-4 4-4s4 2 4 4v4"/><path d="M5 20h16"/></svg>',
+    'Весы': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M4 8l8-4 8 4"/><path d="M4 8v3c0 1 1 2 2 2s2-1 2-2V8M16 8v3c0 1 1 2 2 2s2-1 2-2V8"/></svg>',
+    'Скорпион': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6v6c0 4 3 6 6 6s6-2 6-6v-6"/><path d="M16 12l4-4-4-4"/></svg>',
+    'Стрелец': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L18 6"/><path d="M14 6h4v4"/><path d="M10 4l2 2M6 8l2 2"/></svg>',
+    'Козерог': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16c0-4 3-6 6-6s5 2 5 5c0 1 1 2 2 2s3-2 3-5"/><path d="M4 16c1 1 2 1 3 1"/></svg>',
+    'Водолей': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3-3 3 3 3-3 3 3 3-3 3 3"/><path d="M3 16l3-3 3 3 3-3 3 3 3-3 3 3"/></svg>',
+    'Рыбы': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12c3-4 6-4 8 0-2 4-5 4-8 0z"/><path d="M20 12c-3-4-6-4-8 0 2 4 5 4 8 0z"/><path d="M12 12h.01"/></svg>'
+};
+
+var CHINESE_SVG = {
+    'Крыса': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6"/><circle cx="8" cy="8" r="2.5"/><circle cx="16" cy="8" r="2.5"/><circle cx="10" cy="13" r=".5" fill="currentColor"/><circle cx="14" cy="13" r=".5" fill="currentColor"/></svg>',
+    'Бык': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6c0 3 2 5 4 5M20 6c0 3-2 5-4 5"/><circle cx="12" cy="14" r="5"/><circle cx="10" cy="13" r=".5" fill="currentColor"/><circle cx="14" cy="13" r=".5" fill="currentColor"/></svg>',
+    'Тигр': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="6"/><path d="M7 8l-1-3 3 1M17 8l1-3-3 1"/><circle cx="10" cy="13" r=".5" fill="currentColor"/><circle cx="14" cy="13" r=".5" fill="currentColor"/><path d="M10 17h4"/></svg>',
+    'Кролик': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="15" rx="6" ry="5"/><path d="M8 10c0-3 1-5 2-5s1 3 1 5M14 10c0-3 1-5 2-5s1 3 1 5"/><circle cx="10" cy="15" r=".5" fill="currentColor"/><circle cx="14" cy="15" r=".5" fill="currentColor"/></svg>',
+    'Дракон': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18c2-3 6-4 8-4s6 1 8 4"/><path d="M6 14c0-5 3-8 6-8s6 3 6 8"/><circle cx="10" cy="11" r=".5" fill="currentColor"/><circle cx="14" cy="11" r=".5" fill="currentColor"/><path d="M12 3v2"/></svg>',
+    'Змея': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20c0-3 3-4 6-4s6-1 6-4-3-4-6-4-6-1-6-4 3-3 6-3"/><circle cx="17" cy="7" r=".5" fill="currentColor"/></svg>',
+    'Лошадь': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20c0-5 2-8 6-8s6 3 6 8"/><path d="M6 12l4-8 6 4 2-1v3"/><circle cx="17" cy="8" r=".5" fill="currentColor"/></svg>',
+    'Коза': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="14" rx="6" ry="5"/><path d="M7 10c0-4 2-6 3-6M17 10c0-4-2-6-3-6"/><circle cx="10" cy="14" r=".5" fill="currentColor"/><circle cx="14" cy="14" r=".5" fill="currentColor"/></svg>',
+    'Обезьяна': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="6"/><circle cx="5" cy="11" r="2.5"/><circle cx="19" cy="11" r="2.5"/><circle cx="10" cy="13" r=".5" fill="currentColor"/><circle cx="14" cy="13" r=".5" fill="currentColor"/><path d="M10 16c1 .5 3 .5 4 0"/></svg>',
+    'Петух': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6c0-2 1-3 2-3s1 1 1 2 1 2 2 2 2-1 2-3c1 1 2 2 2 4"/><ellipse cx="12" cy="14" rx="5" ry="5"/><circle cx="10" cy="13" r=".5" fill="currentColor"/><path d="M13 16l2 2"/></svg>',
+    'Собака': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="6"/><path d="M6 8c-1-2-1-4 1-4l2 3M18 8c1-2 1-4-1-4l-2 3"/><circle cx="10" cy="12" r=".5" fill="currentColor"/><circle cx="14" cy="12" r=".5" fill="currentColor"/><path d="M12 15v2"/></svg>',
+    'Свинья': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6"/><ellipse cx="12" cy="16" rx="2" ry="1.5"/><path d="M7 8l1-3M17 8l-1-3"/><circle cx="10" cy="12" r=".5" fill="currentColor"/><circle cx="14" cy="12" r=".5" fill="currentColor"/></svg>'
+};
+
+var UI_ICONS = {
+    calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+    sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>',
+    leaf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13c0-5 6-9 16-9-1 10-6 16-11 16z"/><path d="M4 20c2-6 8-9 13-10"/></svg>',
+    snowflake: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>',
+    star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 9 22 9 16 14 18 21 12 17 6 21 8 14 2 9 9 9 12 2"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>'
+};
+
+var ZODIAC = [
+    { end: 20, name: 'Козерог' },
+    { end: 19, name: 'Водолей' },
+    { end: 21, name: 'Рыбы' },
+    { end: 20, name: 'Овен' },
+    { end: 21, name: 'Телец' },
+    { end: 21, name: 'Близнецы' },
+    { end: 23, name: 'Рак' },
+    { end: 23, name: 'Лев' },
+    { end: 23, name: 'Дева' },
+    { end: 23, name: 'Весы' },
+    { end: 22, name: 'Скорпион' },
+    { end: 22, name: 'Стрелец' },
+    { end: 32, name: 'Козерог' }
+];
+
+var ELEMENTS = {
+    'Овен': 'Огонь', 'Лев': 'Огонь', 'Стрелец': 'Огонь',
+    'Телец': 'Земля', 'Дева': 'Земля', 'Козерог': 'Земля',
+    'Близнецы': 'Воздух', 'Весы': 'Воздух', 'Водолей': 'Воздух',
+    'Рак': 'Вода', 'Скорпион': 'Вода', 'Рыбы': 'Вода'
+};
+
+var PLANETS = {
+    'Овен': 'Марс', 'Телец': 'Венера', 'Близнецы': 'Меркурий',
+    'Рак': 'Луна', 'Лев': 'Солнце', 'Дева': 'Меркурий',
+    'Весы': 'Венера', 'Скорпион': 'Плутон', 'Стрелец': 'Юпитер',
+    'Козерог': 'Сатурн', 'Водолей': 'Уран', 'Рыбы': 'Нептун'
+};
+
+var BIRTHSTONES = ['Гранат', 'Аметист', 'Аквамарин', 'Алмаз',
+                   'Изумруд', 'Жемчуг', 'Рубин', 'Перидот',
+                   'Сапфир', 'Опал', 'Топаз', 'Бирюза'];
+
+var CHINESE = ['Крыса', 'Бык', 'Тигр', 'Кролик', 'Дракон', 'Змея',
+               'Лошадь', 'Коза', 'Обезьяна', 'Петух', 'Собака', 'Свинья'];
+
+var SEASONS = {
+    0: 'Зима', 1: 'Зима', 2: 'Весна', 3: 'Весна', 4: 'Весна',
+    5: 'Лето', 6: 'Лето', 7: 'Лето', 8: 'Осень', 9: 'Осень',
+    10: 'Осень', 11: 'Зима'
+};
+
+function $(id) { return document.getElementById(id); }
+
+function formatNum(n) { return n.toLocaleString('ru-RU'); }
+
+function plural(n, one, few, many) {
+    var mod10 = Math.abs(n) % 10;
+    var mod100 = Math.abs(n) % 100;
+    if (mod10 === 1 && mod100 !== 11) return one;
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return few;
+    return many;
+}
+
+function getZodiac(day, month) {
+    return day < ZODIAC[month - 1].end
+        ? ZODIAC[month - 1].name
+        : ZODIAC[month].name;
+}
+
+function getChinese(year) {
+    return CHINESE[((year - 4) % 12 + 12) % 12];
+}
+
+function getDecan(day) {
+    if (day <= 10) return 'I декада';
+    if (day <= 20) return 'II декада';
+    return 'III декада';
+}
+
+function calculate() {
+    var day = parseInt($('day').value, 10);
+    var month = parseInt($('month').value, 10);
+    var year = parseInt($('year').value, 10);
+
+    if (!day || !month || !year ||
+        day < 1 || day > 31 ||
+        month < 1 || month > 12 ||
+        year < 1900 || year > 2100) {
+        shakeInputs();
+        return;
+    }
+
+    var testDate = new Date(year, month - 1, day);
+    if (testDate.getDate() !== day ||
+        testDate.getMonth() !== month - 1 ||
+        testDate.getFullYear() !== year) {
+        shakeInputs();
+        return;
+    }
+
+    var now = new Date();
+    if (testDate > now) {
+        shakeInputs();
+        return;
+    }
+
+    birthDate = testDate;
+    $('results').classList.add('show');
+
+    renderAll();
+    saveToHistory(day, month, year);
+
+    if (liveInterval) clearInterval(liveInterval);
+    liveInterval = setInterval(renderLive, 1000);
+
+    launchConfetti();
+
+    setTimeout(function() {
+        $('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+}
+
+function renderAll() {
+    var now = new Date();
+    var b = birthDate;
+
+    var years = now.getFullYear() - b.getFullYear();
+    var months = now.getMonth() - b.getMonth();
+    var days = now.getDate() - b.getDate();
+
+    if (days < 0) {
+        months--;
+        var prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += prevMonth.getDate();
+    }
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
+
+    $('heroAge').textContent = years;
+    $('heroUnit').textContent = plural(years, 'год', 'года', 'лет');
+
+    var parts = [];
+    parts.push(years + ' ' + plural(years, 'год', 'года', 'лет'));
+    if (months > 0) parts.push(months + ' ' + plural(months, 'месяц', 'месяца', 'месяцев'));
+    if (days > 0) parts.push(days + ' ' + plural(days, 'день', 'дня', 'дней'));
+    $('heroSub').textContent = parts.join(' · ');
+
+    var zod = getZodiac(b.getDate(), b.getMonth() + 1);
+    $('zodiacIconWrap').innerHTML = ZODIAC_SVG[zod] || '';
+    $('zodiacName').textContent = zod;
+    $('zodiacElement').textContent = 'Стихия: ' + (ELEMENTS[zod] || '—');
+    $('zodiacPlanet').textContent = 'Планета: ' + (PLANETS[zod] || '—');
+
+    var chin = getChinese(b.getFullYear());
+    $('chineseIconWrap').innerHTML = CHINESE_SVG[chin] || '';
+    $('chineseName').textContent = chin;
+    $('chineseYear').textContent = 'Год ' + b.getFullYear() + ' по восточному календарю';
+
+    $('statIcon1').innerHTML = UI_ICONS.calendar;
+    $('statIcon2').innerHTML = UI_ICONS.star;
+    $('statIcon3').innerHTML = (function() {
+        var s = SEASONS[b.getMonth()];
+        if (s === 'Зима') return UI_ICONS.snowflake;
+        if (s === 'Весна') return UI_ICONS.leaf;
+        if (s === 'Лето') return UI_ICONS.sun;
+        return UI_ICONS.leaf;
+    })();
+    $('statIcon4').innerHTML = UI_ICONS.chart;
+
+    $('weekday').textContent = WEEKDAYS[b.getDay()];
+    $('birthstone').textContent = BIRTHSTONES[b.getMonth()];
+    $('season').textContent = SEASONS[b.getMonth()];
+    $('decan').textContent = getDecan(b.getDate());
+
+    $('progIcon1').innerHTML = UI_ICONS.chart;
+    $('progIcon2').innerHTML = UI_ICONS.calendar;
+    $('progIcon3').innerHTML = UI_ICONS.clock;
+
+    var nowMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var nextBd = new Date(now.getFullYear(), b.getMonth(), b.getDate());
+    if (nextBd < nowMid) nextBd.setFullYear(now.getFullYear() + 1);
+
+    var daysToBd = Math.round((nextBd - nowMid) / 86400000);
+
+    $('nextBd').textContent = nextBd.getDate() + ' ' + MONTHS[nextBd.getMonth()];
+    $('daysToBd').textContent = daysToBd + ' ' + plural(daysToBd, 'день', 'дня', 'дней');
+    $('willBeAge').textContent = (nextBd.getFullYear() - b.getFullYear()) + ' ' +
+        plural(nextBd.getFullYear() - b.getFullYear(), 'год', 'года', 'лет');
+
+    var lastBd = new Date(now.getFullYear(), b.getMonth(), b.getDate());
+    if (lastBd > now) lastBd.setFullYear(now.getFullYear() - 1);
+    var nextBdP = new Date(lastBd);
+    nextBdP.setFullYear(lastBd.getFullYear() + 1);
+
+    var pct = Math.min(100, Math.max(0, ((now - lastBd) / (nextBdP - lastBd)) * 100));
+    $('progressPct').textContent = pct.toFixed(1) + '%';
+    setTimeout(function() { $('progressFill').style.width = pct + '%'; }, 100);
+
+    var firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    var nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    var monthPct = ((now - firstDay) / (nextMonth - firstDay)) * 100;
+    $('progressMonthPct').textContent = monthPct.toFixed(1) + '%';
+    setTimeout(function() { $('progressMonthFill').style.width = monthPct + '%'; }, 200);
+
+    var dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var dayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    var dayPct = ((now - dayStart) / (dayEnd - dayStart)) * 100;
+    $('progressDayPct').textContent = dayPct.toFixed(1) + '%';
+    setTimeout(function() { $('progressDayFill').style.width = dayPct + '%'; }, 300);
+
+    renderLive();
+}
+
+function renderLive() {
+    if (!birthDate) return;
+    var now = new Date();
+    var diffMs = now - birthDate;
+
+    var totalSec = Math.floor(diffMs / 1000);
+    var totalMin = Math.floor(totalSec / 60);
+    var totalHours = Math.floor(totalMin / 60);
+    var totalDays = Math.floor(totalHours / 24);
+    var totalWeeks = Math.floor(totalDays / 7);
+    var totalMonths = (now.getFullYear() - birthDate.getFullYear()) * 12 +
+                      (now.getMonth() - birthDate.getMonth());
+    var totalYears = now.getFullYear() - birthDate.getFullYear();
+
+    $('liveYears').textContent = formatNum(totalYears);
+    $('liveMonths').textContent = formatNum(totalMonths);
+    $('liveWeeks').textContent = formatNum(totalWeeks);
+    $('liveDays').textContent = formatNum(totalDays);
+    $('liveHours').textContent = formatNum(totalHours);
+    $('liveMinutes').textContent = formatNum(totalMin);
+    $('liveSeconds').textContent = formatNum(totalSec);
+
+    $('liveHeart').textContent = formatNum(Math.floor(totalMin * 70));
+    $('liveBreath').textContent = formatNum(Math.floor(totalMin * 16));
+    $('liveMoons').textContent = formatNum(Math.floor(totalDays / 29.53));
+    $('liveOrbits').textContent = formatNum(totalYears);
+    $('liveDreams').textContent = formatNum(Math.floor(totalDays * 4));
+    $('liveWords').textContent = formatNum(Math.floor(totalDays * 16000));
+}
+
+function setToday() {
+    var now = new Date();
+    $('day').value = now.getDate();
+    $('month').value = now.getMonth() + 1;
+    $('year').value = now.getFullYear();
+}
+
+function shakeInputs() {
+    var group = document.querySelector('.group');
+    if (group && group.animate) {
+        group.animate([
+            { transform: 'translateX(0)' },
+            { transform: 'translateX(-8px)' },
+            { transform: 'translateX(8px)' },
+            { transform: 'translateX(-6px)' },
+            { transform: 'translateX(6px)' },
+            { transform: 'translateX(0)' }
+        ], { duration: 400, easing: 'ease-in-out' });
+    }
+    var fields = document.querySelectorAll('.field');
+    for (var i = 0; i < fields.length; i++) {
+        fields[i].style.background = 'rgba(255, 59, 48, 0.08)';
+    }
+    setTimeout(function() {
+        for (var j = 0; j < fields.length; j++) fields[j].style.background = '';
+    }, 900);
+}
+
+function launchConfetti() {
+    var colors = ['#007aff', '#34c759', '#ff9500', '#5856d6', '#ff2d55'];
+    for (var i = 0; i < 40; i++) {
+        (function(idx) {
+            setTimeout(function() {
+                var c = document.createElement('div');
+                c.className = 'confetti';
+                var size = 6 + Math.random() * 6;
+                c.style.left = (Math.random() * 100) + 'vw';
+                c.style.width = size + 'px';
+                c.style.height = size + 'px';
+                c.style.background = colors[Math.floor(Math.random() * colors.length)];
+                c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                var dur = 2 + Math.random() * 2;
+                c.style.animationDuration = dur + 's';
+                c.style.animationDelay = (Math.random() * 0.3) + 's';
+                document.body.appendChild(c);
+                setTimeout(function() { c.remove(); }, (dur + 1) * 1000);
+            }, idx * 20);
+        })(i);
+    }
+}
+
+function getHistory() {
+    try {
+        var raw = localStorage.getItem('age_history');
+        return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+}
+
+function saveToHistory(day, month, year) {
+    try {
+        var list = getHistory();
+        var filtered = list.filter(function(item) {
+            return !(item.day === day && item.month === month && item.year === year);
+        });
+        filtered.unshift({ day: day, month: month, year: year, ts: Date.now() });
+        if (filtered.length > 10) filtered = filtered.slice(0, 10);
+        localStorage.setItem('age_history', JSON.stringify(filtered));
+    } catch (e) {}
+}
+
+function renderHistory() {
+    var list = getHistory();
+    var container = $('historyList');
+
+    if (list.length === 0) {
+        container.innerHTML = '<p class="empty-state">Здесь появятся ваши последние расчёты</p>';
+        return;
+    }
+
+    var html = '';
+    var now = new Date();
+    for (var i = 0; i < list.length; i++) {
+        var item = list[i];
+        var bd = new Date(item.year, item.month - 1, item.day);
+        var age = now.getFullYear() - bd.getFullYear();
+        if (now.getMonth() < bd.getMonth() ||
+            (now.getMonth() === bd.getMonth() && now.getDate() < bd.getDate())) {
+            age--;
+        }
+        html += '<div class="history-item" data-day="' + item.day +
+                '" data-month="' + item.month + '" data-year="' + item.year + '">';
+        html += '<div>';
+        html += '<div class="date">' + item.day + ' ' + MONTHS[item.month - 1] + ' ' + item.year + '</div>';
+        html += '<div class="age">' + age + ' ' + plural(age, 'год', 'года', 'лет') + '</div>';
+        html += '</div>';
+        html += '<div class="num">' + age + '</div>';
+        html += '</div>';
+    }
+    container.innerHTML = html;
+
+    var items = container.querySelectorAll('.history-item');
+    for (var j = 0; j < items.length; j++) {
+        items[j].addEventListener('click', function() {
+            $('day').value = this.getAttribute('data-day');
+            $('month').value = this.getAttribute('data-month');
+            $('year').value = this.getAttribute('data-year');
+            closeModal('historyModal');
+            calculate();
+        });
+    }
+}
+
+function clearHistory() {
+    try { localStorage.removeItem('age_history'); } catch (e) {}
+    renderHistory();
+}
+
+function openModal(id) {
+    $(id).classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+    $(id).classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+function init() {
+    $('calcBtn').addEventListener('click', calculate);
+    $('todayBtn').addEventListener('click', setToday);
+
+    $('historyBtn').addEventListener('click', function() {
+        renderHistory();
+        openModal('historyModal');
+    });
+    $('closeHistory').addEventListener('click', function() { closeModal('historyModal'); });
+    $('historyModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal('historyModal');
+    });
+    $('clearHistoryBtn').addEventListener('click', clearHistory);
+
+    $('infoBtn').addEventListener('click', function() { openModal('infoModal'); });
+    $('closeInfo').addEventListener('click', function() { closeModal('infoModal'); });
+    $('infoModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal('infoModal');
+    });
+
+    var inputs = document.querySelectorAll('input[type=number]');
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); calculate(); }
+        });
+        inputs[i].addEventListener('input', function() {
+            var fields = document.querySelectorAll('.field');
+            for (var k = 0; k < fields.length; k++) fields[k].style.background = '';
+        });
+    }
+
+    var dayInput = $('day');
+    var monthInput = $('month');
+    dayInput.addEventListener('input', function() {
+        if (dayInput.value.length >= 2) monthInput.focus();
+    });
+    monthInput.addEventListener('input', function() {
+        if (monthInput.value.length >= 2) $('year').focus();
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal('historyModal');
+            closeModal('infoModal');
+        }
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+</script>
+
+</body>
+</html>
